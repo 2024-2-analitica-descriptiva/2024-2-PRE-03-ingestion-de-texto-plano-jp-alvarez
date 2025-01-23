@@ -18,3 +18,42 @@ def pregunta_01():
 
 
     """
+    import pandas as pd
+
+    with open('files/input/clusters_report.txt', 'r', encoding='utf-8') as file:
+      lines = file.readlines()
+
+    
+    import pandas as pd
+
+    with open('files/input/clusters_report.txt', 'r', encoding='utf-8') as file:
+        ds = file.readlines()
+
+    sub_ds = ds[4:]
+
+    data = [["cluster", "cantidad_de_palabras_clave", "porcentaje_de_palabras_clave", "principales_palabras_clave"]]
+
+    x = []
+    primera = True
+    for linea in sub_ds:
+        linea.strip()
+        linea = linea.split()
+        if len(linea) > 0 and primera:
+            x.append(int(linea[0]))
+            x.append(int(linea[1]))
+            x.append(float(linea[2].replace(',', '.')))
+            x.append(" ".join(linea[4:]))
+            primera = False
+
+        elif len(linea) > 0:
+            x.append(" ".join(linea))
+
+        else:
+            primera = True
+            x[3] = ' '.join(x[3:]).replace('.', '')
+            data.append(x[:4])
+            x = []
+
+    return(pd.DataFrame(data[1:], columns=data[0]))
+
+print(pregunta_01())
